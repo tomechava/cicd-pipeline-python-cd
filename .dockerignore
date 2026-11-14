@@ -17,3 +17,4 @@ pylint-report.txt
 flake8-report.txt
 .vscode
 tests
+infra

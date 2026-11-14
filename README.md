@@ -1,4 +1,4 @@
-# entregable-2-cicd
+# cicd-pipeline-python-cd
 
 Pipeline de Integración Continua para una calculadora web en Flask, con GitHub Actions, Docker, SonarCloud y publicación en Docker Hub.
 

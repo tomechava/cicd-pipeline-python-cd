@@ -61,3 +61,27 @@ def test_health(client):
     response = client.get("/health")
     assert response.status_code == 200
     assert response.get_json() == {"status": "ok", "version": "local"}
+
+
+def test_index_post_potencia(client):
+    response = client.post("/", data={"num1": "2", "num2": "3", "operacion": "potencia"})
+    assert response.status_code == 200
+    assert b"Resultado: 8.0" in response.data
+
+
+def test_index_post_potencia_demasiado_grande(client):
+    response = client.post("/", data={"num1": "10", "num2": "1000", "operacion": "potencia"})
+    assert response.status_code == 200
+    assert b"Error: El resultado es demasiado grande" in response.data
+
+
+def test_index_post_modulo(client):
+    response = client.post("/", data={"num1": "10", "num2": "3", "operacion": "modulo"})
+    assert response.status_code == 200
+    assert b"Resultado: 1.0" in response.data
+
+
+def test_index_post_modulo_por_cero(client):
+    response = client.post("/", data={"num1": "5", "num2": "0", "operacion": "modulo"})
+    assert response.status_code == 200
+    assert b"Error: No se puede dividir por cero" in response.data

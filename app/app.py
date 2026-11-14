@@ -1,3 +1,5 @@
+"""Aplicación web Flask de la calculadora."""
+
 # app/app.py
 from flask import Flask, render_template, request
 from .calculadora import sumar, restar, multiplicar, dividir
@@ -7,6 +9,7 @@ app = Flask(__name__)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
+    """Muestra el formulario y, en POST, calcula el resultado de la operación."""
     resultado = None
     if request.method == "POST":
         try:
@@ -33,4 +36,6 @@ def index():
 
 
 if __name__ == "__main__":  # pragma: no cover
-    app.run(debug=True, port=5000, host="0.0.0.0")  # Quita debug=True para producción
+    # Solo para desarrollo local: sin modo debug y escuchando únicamente en localhost.
+    # En el contenedor la sirve Gunicorn, que sí escucha en 0.0.0.0 (ver Dockerfile).
+    app.run(port=5000)

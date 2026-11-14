@@ -5,12 +5,16 @@ FROM python:3.13-slim
 # Establece el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
-# Copia solo el archivo de requerimientos primero para aprovechar el cache de Docker
-COPY requirements.txt .
+# Copia solo el archivo de dependencias bloqueadas primero para aprovechar el cache de Docker
+COPY requirements.lock .
 
-# Instala solo las dependencias de ejecución (Flask y Gunicorn)
+# Instala solo las dependencias de ejecución (Flask y Gunicorn) con versiones y hashes verificados.
+# --only-binary :all: evita ejecutar scripts de instalación (solo wheels).
 # Usa --no-cache-dir para reducir el tamaño de la imagen
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --only-binary :all: --require-hashes -r requirements.lock
+
+# Crea un usuario sin privilegios para ejecutar la aplicación (no usar root)
+RUN useradd --create-home --uid 10001 appuser
 
 # Copia el código de la aplicación (solo la carpeta app)
 COPY app/ ./app/
@@ -18,6 +22,9 @@ COPY app/ ./app/
 # Expón el puerto en el que Gunicorn servirá la aplicación
 # Gunicorn por defecto usa 8000, así que usaremos ese.
 EXPOSE 8000
+
+# Ejecuta el contenedor como el usuario sin privilegios
+USER appuser
 
 # Comando para ejecutar la aplicación usando Gunicorn cuando el contenedor inicie
 # 'app.app:app' significa: del archivo app.py dentro del paquete app, usa la instancia 'app' de Flask.

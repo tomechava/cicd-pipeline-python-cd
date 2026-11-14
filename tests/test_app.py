@@ -56,3 +56,8 @@ def test_index_post_restar_negativos(client):
     response = client.post('/', data={'num1': '-5', 'num2': '-3', 'operacion': 'restar'})
     assert response.status_code == 200
     assert b'Resultado: -2.0' in response.data
+
+def test_health(client):
+    response = client.get("/health")
+    assert response.status_code == 200
+    assert response.get_json() == {"status": "ok", "version": "local"}

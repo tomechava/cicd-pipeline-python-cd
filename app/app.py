@@ -1,6 +1,8 @@
 """Aplicación web Flask de la calculadora."""
 
 # app/app.py
+import os
+
 from flask import Flask, render_template, request
 from .calculadora import sumar, restar, multiplicar, dividir
 
@@ -33,6 +35,12 @@ def index():
             resultado = "Error: No se puede dividir por cero"
 
     return render_template("index.html", resultado=resultado)
+
+
+@app.route("/health")
+def health():
+    """Health check usado por el Load Balancer. Incluye la versión desplegada."""
+    return {"status": "ok", "version": os.environ.get("APP_VERSION", "local")}
 
 
 if __name__ == "__main__":  # pragma: no cover

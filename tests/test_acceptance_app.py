@@ -18,6 +18,14 @@ def browser():
     options.add_argument("--headless")  # Ejecuta sin interfaz gráfica
     options.add_argument("--no-sandbox")  # Necesario para algunos entornos
     options.add_argument("--disable-dev-shm-usage")  # Necesario para algunos entornos
+    # Chrome reciente usa "HTTPS por defecto": ante un sitio público en http:// intenta
+    # https:// y, como el ALB solo escucha en el puerto 80, muestra una página de aviso
+    # en lugar de la calculadora. Se desactiva para poder probar Staging por HTTP.
+    options.add_argument(
+        "--disable-features=HttpsUpgrades,HttpsFirstModeV2,"
+        "HttpsFirstBalancedModeAutoEnable,HttpsFirstModeV2ForTypicallySecureUsers"
+    )
+    options.add_experimental_option("prefs", {"https_only_mode_enabled": False})
     driver = webdriver.Chrome(options=options)
 
     yield driver

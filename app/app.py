@@ -4,9 +4,19 @@
 import os
 
 from flask import Flask, render_template, request
-from .calculadora import sumar, restar, multiplicar, dividir
+from .calculadora import sumar, restar, multiplicar, dividir, potencia, modulo
 
 app = Flask(__name__)
+
+# Relaciona cada operación del formulario con su función
+OPERACIONES = {
+    "sumar": sumar,
+    "restar": restar,
+    "multiplicar": multiplicar,
+    "dividir": dividir,
+    "potencia": potencia,
+    "modulo": modulo,
+}
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -17,22 +27,18 @@ def index():
         try:
             num1 = float(request.form["num1"])
             num2 = float(request.form["num2"])
-            operacion = request.form["operacion"]
+            funcion = OPERACIONES.get(request.form["operacion"])
 
-            if operacion == "sumar":
-                resultado = sumar(num1, num2)
-            elif operacion == "restar":
-                resultado = restar(num1, num2)
-            elif operacion == "multiplicar":
-                resultado = multiplicar(num1, num2)
-            elif operacion == "dividir":
-                resultado = dividir(num1, num2)
-            else:
+            if funcion is None:
                 resultado = "Operación no válida"
+            else:
+                resultado = funcion(num1, num2)
         except ValueError:
             resultado = "Error: Introduce números válidos"
         except ZeroDivisionError:
             resultado = "Error: No se puede dividir por cero"
+        except OverflowError:
+            resultado = "Error: El resultado es demasiado grande"
 
     return render_template("index.html", resultado=resultado)
 

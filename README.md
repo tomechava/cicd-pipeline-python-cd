@@ -1,6 +1,6 @@
 # cicd-pipeline-python-cd
 
-Pipeline de Integración Continua para una calculadora web en Flask, con GitHub Actions, Docker, SonarCloud y publicación en Docker Hub.
+Pipeline de CI/CD para una calculadora web en Flask: GitHub Actions, Docker, SonarCloud y Docker Hub, con despliegue automático en AWS ECS (Staging y Producción) mediante Terraform y aprobación manual antes de Producción.
 
 ## Integrantes
 
@@ -80,8 +80,6 @@ Lo primero sería monitoreo y alertas. Ahora mismo tenemos los logs en CloudWatc
 Lo segundo sería escanear la seguridad de la imagen y de las dependencias. SonarCloud revisa nuestro código, pero no revisa si la imagen base de Docker o librerías como Flask y Gunicorn tienen vulnerabilidades conocidas, que es de donde salen muchos problemas. Se podría agregar un paso con Trivy en `build-and-test` que falle si encuentra vulnerabilidades críticas, y activar Dependabot para que abra PRs actualizando las dependencias. Para Terraform hay herramientas parecidas, como Checkov.
 
 ### 6. Experiencia de cada integrante
-
-_Cada uno reemplaza su "(pendiente)" con su experiencia._
 
 **Santiago Alvarez:** A mí me pareció muy chévere ver el flujo completo funcionando de verdad. Después del merge del PR no hubo que hacer nada a mano para que las operaciones nuevas llegaran a Staging, y cuando llegaron a producción ya habían pasado por todas las pruebas y por SonarCloud. Cuando probé potencia y módulo en la URL de producción para tomar la captura, sabía que era la misma imagen que se había probado en Staging, y con `/health` se podía ver que estaba el commit correcto. Lo que no me gustó tanto fue lo de las credenciales de AWS Academy, que se vencen cada 4 horas y toca actualizar los secretos en GitHub antes de desplegar, porque si no el pipeline falla aunque el código esté bien. También que cada ejecución se demora como 10 minutos más la aprobación, y para un cambio pequeño eso se siente lento.
 

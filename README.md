@@ -87,7 +87,7 @@ _Cada uno reemplaza su "(pendiente)" con su experiencia._
 
 **Emmanuel Correa:** _(pendiente)_
 
-**Tomás Echavarria:** _(pendiente)_
+**Tomás Echavarria:** Me gustó mucho aprender las buenas practicas que mitiguen los riesgos de mal desarrollo usando fases de testeo, despliegue a diferentes ambientes y chequeos del codigo en diferentes ambitos. Ya conocia bastante del tema pero profundicé y conoci nuevas herramientas uy utiles.
 
 **José David Toro:** _(pendiente)_
 
